@@ -1,0 +1,88 @@
+openapi: 3.0.3
+info:
+  title: Orders Api
+  description: Orders Api
+  version: 1.0.0
+servers:
+  - url: 'https://localhost:8080'
+paths:
+  /orders:
+    get:
+      description: Get all orders
+      operationId: getOrders
+      responses:
+        '200':
+          description: List of all orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+    post:
+      description: Post a new order
+      operationId: postOrder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostOrder'
+      responses:
+        '200':
+          description: An order posted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+
+  /orders/{orderId}:
+    post:
+      description: Update existing order
+      operationId: updateOrder
+      parameters:
+        - in: path
+          name: orderId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: Id of the order to be updated
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostOrder'
+      responses:
+        '200':
+          description: An order updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+
+components:
+  schemas:
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        amount:
+          type: integer
+        cost:
+          type: number
+          example: 4.89
+        createdAt:
+          type: string
+
+    PostOrder:
+      type: object
+      properties:
+        amount:
+          type: integer
+        cost:
+          type: number
+      required:
+        - amount
+        - cost
