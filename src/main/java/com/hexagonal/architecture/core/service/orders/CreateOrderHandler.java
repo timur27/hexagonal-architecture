@@ -11,9 +11,8 @@ public class CreateOrderHandler {
     private final OrdersPersistence ordersPersistence;
 
     public Order handle(CreateOrder cmd) {
-        // TODO figure out another way of initializing domain object
-        final var order = new Order()
-                .create(cmd.getAmount(), cmd.getCost());
+        final var order = Order.create()
+                .setup(cmd.getAmount(), cmd.getCost());
 
         return ordersPersistence.create(order);
     }

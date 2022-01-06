@@ -32,18 +32,20 @@ public class Order {
     private BigDecimal cost;
     private ZonedDateTime createdAt;
 
-    private Order(int amount, BigDecimal cost, ZonedDateTime createdAt) {
-        this.amount = amount;
-        this.cost = cost;
-        this.createdAt = createdAt;
+    public static Order create() {
+        return new Order();
     }
 
-    public Order create(int amount, BigDecimal cost) {
+    public Order setup(int amount, BigDecimal cost) {
         Optional.of(amount)
                 .filter(byAllowedOrderAmount())
                 .orElseThrow(() -> new OrderNotCreatedException(String.format("Order with amount %s cannot be created", amount)));
 
-        return new Order(amount, cost, ZonedDateTime.now());
+        this.amount = amount;
+        this.cost = cost;
+        this.createdAt = ZonedDateTime.now();
+
+        return this;
     }
 
     public Order update(int amount, BigDecimal cost) {
